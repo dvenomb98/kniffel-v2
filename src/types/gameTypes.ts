@@ -57,7 +57,6 @@ export enum PlayerTurn {
     stats: GameStats;
     final_score: number;
     bonus_score: number;
-    is_connected: boolean;
     id?: string | null;
   }
   

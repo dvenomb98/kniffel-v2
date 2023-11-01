@@ -3,13 +3,17 @@ import { initialPlayerOneStats } from "@/lib/game/gameConfig";
 import { Action, ActionTypes, gameReducer } from "@/lib/game/reducer";
 import { GameState, GameType, Player, PlayerTurn } from "@/types/gameTypes";
 import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState } from "react";
+import debounce from 'lodash.debounce';
+import client from "@/lib/supabase/client";
+import { UserData } from "@/types/userTypes";
+
 
 
 interface GameProviderProps {
   children: ReactNode;
-  session_values: GameType;
-  game_id: string;
-  player_id: string | null;
+  parentGameValues: GameType;
+  gameId: string;
+  userData: UserData | null;
 }
 
 // Create the context
@@ -19,29 +23,31 @@ export const GameContext = createContext<{
   currentPlayer: Player;
   onMove: boolean;
   isDebouncing: boolean;
-  player_id: string | null;
+  userData: UserData | null
+  otherPlayer: Player | null
 }>({
   gameValues: null,
   dispatch: () => {},
   currentPlayer: initialPlayerOneStats,
   onMove: false,
   isDebouncing: false,
-  player_id: null,
+  userData: null,
+  otherPlayer: null,
 });
 
 // Create a provider wrapper component
 export const GameProvider = ({
   children,
-  session_values,
-  game_id,
-  player_id,
+  parentGameValues,
+  gameId,
+  userData,
 }: GameProviderProps) => {
-  const [gameValues, dispatch] = useReducer(gameReducer, session_values);
+  const [gameValues, dispatch] = useReducer(gameReducer, parentGameValues);
   const [isDebouncing, setIsDebouncing] = useState<boolean>(false);
 
-  useEffect(() => {
-    dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload: session_values });
-  }, [session_values]);
+  // useEffect(() => {
+  //   dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload: parentGameValues });
+  // }, [parentGameValues]);
 
   useEffect(() => {
     if (
@@ -53,20 +59,21 @@ export const GameProvider = ({
     }
   }, [gameValues]);
 
-//   const debouncedUpdateFirestore = useCallback(
-//     debounce(async (gameId: string, gameValues: GameType) => {
-//       setIsDebouncing(false);
-//       await setDoc(doc(db, 'sessions', gameId as string), gameValues);
-//     }, 300),
-//     [],
-//   );
+  const debouncedUpdate = useCallback(
+    debounce(async (gameId, gameValues) => {
+      console.log("Debounce would happen")
+      await client.from("sessions_table").update(gameValues).eq("id", gameId)
+      setIsDebouncing(false);
+    }, 300),
+    [],
+  );
 
-//   useEffect(() => {
-//     if (game_id && !isDebouncing) {
-//       setIsDebouncing(true);
-//       debouncedUpdateFirestore(game_id, gameValues);
-//     }
-//   }, [game_id, gameValues]);
+  useEffect(() => {
+    if (!!gameId && !isDebouncing) {
+      setIsDebouncing(true);
+      debouncedUpdate(gameId, gameValues);
+    }
+  }, [gameId, gameValues]);
 
   const currentPlayer = useMemo(
     () =>
@@ -75,11 +82,16 @@ export const GameProvider = ({
         : gameValues.playerTwo,
     [gameValues.playerTurn],
   );
-  const onMove = currentPlayer?.id === player_id;
+  const onMove = currentPlayer?.id === userData?.userId
+
+  const otherPlayer = useMemo(() => {
+    if(gameValues.playerOne.id === userData?.userId) return gameValues.playerTwo
+    else return gameValues.playerOne
+  }, [gameValues, userData?.userId])
 
   return (
     <GameContext.Provider
-      value={{ gameValues, dispatch, currentPlayer, onMove, isDebouncing, player_id }}
+      value={{ gameValues, dispatch, currentPlayer, onMove, isDebouncing, userData, otherPlayer }}
     >
       {children}
     </GameContext.Provider>

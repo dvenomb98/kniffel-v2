@@ -33,7 +33,6 @@ export const initialPlayerOneStats: Player = {
   stats: initialScore,
   final_score: 0,
   bonus_score: 0,
-  is_connected: false,
   id: null,
 };
 
@@ -43,7 +42,6 @@ export const initialPlayerTwoStats: Player = {
   stats: initialScore,
   final_score: 0,
   bonus_score: 0,
-  is_connected: false,
   id: null,
 };
 

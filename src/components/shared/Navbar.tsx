@@ -6,7 +6,7 @@ import ThemeSwitcher from '../ui/ThemeSwitcher'
 const Navbar: FC = async () => {
     
   return (
-    <section className='p-5 border-b border-divider'>
+    <section className='border-b border-divider p-5'>
     <nav className='layout-container flex items-center justify-between'>
       <Logo />
       <ThemeSwitcher />

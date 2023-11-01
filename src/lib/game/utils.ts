@@ -11,15 +11,18 @@ const generateGameId = () => {
 
 export const createNewGameSession = async () => {
 	try {
-		const referenceId = nanoid();
+		const gameId = generateGameId()
 		const { error } = await client
 			.from("sessions_table")
-			.insert({ ...initialGameValues, id: generateGameId()});
+			.insert({ ...initialGameValues, id: gameId});
 		if (error) throw new Error(error.message);
-		const gameUrl = `${URLS.GAME}/${referenceId}`;
+		const gameUrl = `${URLS.GAME}/${gameId}`;
 		return gameUrl;
 	} catch (e) {
 		console.error(e);
 		return null;
 	}
 };
+
+
+
