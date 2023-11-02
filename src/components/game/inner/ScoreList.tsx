@@ -1,9 +1,10 @@
 
+import { Skeleton } from '@/components/ui/Skeleton';
 import { canAddScore } from '@/lib/game/logic';
 import { ActionTypes } from '@/lib/game/reducer';
 import { cn } from '@/lib/utils';
 import { useGameContext } from '@/providers/GameProvider';
-import { BottomLayerKeys, Layer, Player, PossibleValue, ScoreKeys, UpperLayerKeys } from '@/types/gameTypes';
+import { BottomLayerKeys, GameState, Layer, Player, PossibleValue, ScoreKeys, UpperLayerKeys } from '@/types/gameTypes';
 import React, { FC, useMemo } from 'react';
 
 interface ScoreListProps {
@@ -37,7 +38,8 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
   const { rollsLeft } = gameValues;
   const isCancelled = value === 'canceled';
 
-  const canCancelScore = !addScore && !correctLayerScoreValue && !rollsLeft && !value;
+  const canCancelScore = !addScore && !correctLayerScoreValue && !rollsLeft && !value && gameValues.gameState !== GameState.FINISHED
+  const lowerOpacity = !onMove && gameValues.gameState !== GameState.FINISHED
 
   const handleAddScore = () => {
     dispatch({
@@ -51,6 +53,8 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
     });
   };
 
+  if(isDebouncing) return <Skeleton className='w-full h-[46px]' />
+
   return (
     <button
       role="button"
@@ -63,7 +67,8 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
           : canCancelScore
           ? 'border-error-light hover:border-error-dark cursor-pointer text-error hover:text-error-dark'
           : 'border-divider opacity-70',
-        !!value && "dark:bg-secondary-dark bg-secondary/50"
+        !!value && "dark:bg-secondary-dark bg-secondary/50",
+        lowerOpacity && "opacity-70"
       )}
     >
       <span className="flex items-center gap-2">

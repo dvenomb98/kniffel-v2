@@ -4,6 +4,8 @@ import client from "../supabase/client";
 import { GameType } from "@/types/gameTypes";
 import isEqual from "lodash.isequal";
 
+const baseUrl = process.env.NEXT_PUBLIC_MAIN_URL
+
 const generateGameId = () => {
 	const typedArray = new Uint8Array(5);
 	const randomValues = window.crypto.getRandomValues(typedArray);
@@ -30,11 +32,9 @@ export const areGamesEqual = (game1: GameType, game2: GameType) => {
 };
 
 export const handleEndOfGame = async (values: GameType) => {
-	
-	const response = await fetch("api/handle-end-of-game", {
+	const response = await fetch(`${baseUrl}/api/handle-end-of-game`, {
 		body: JSON.stringify(values),
 		method: "POST",
 	});
-
 	return response.ok;
 };

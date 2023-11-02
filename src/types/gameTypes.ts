@@ -77,8 +77,4 @@ export interface GameType {
 	round: number;
 	winner: string | null;
 	id: string | null;
-	updates: {
-		winner: boolean;
-		loser: boolean;
-	};
 }

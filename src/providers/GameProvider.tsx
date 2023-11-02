@@ -5,7 +5,6 @@ import { GameState, GameType, Player, PlayerTurn } from "@/types/gameTypes";
 import {
 	ReactNode,
 	createContext,
-	useCallback,
 	useContext,
 	useEffect,
 	useMemo,
@@ -15,7 +14,7 @@ import {
 import debounce from "lodash.debounce";
 import client from "@/lib/supabase/client";
 import { UserData } from "@/types/userTypes";
-import { areGamesEqual } from "@/lib/game/utils";
+import { areGamesEqual, handleEndOfGame } from "@/lib/game/utils";
 
 interface GameProviderProps {
 	children: ReactNode;
@@ -54,43 +53,73 @@ export const GameProvider = ({
 	const [isDebouncing, setIsDebouncing] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (
-			!areGamesEqual(gameValues, parentGameValues) &&
-			parentGameValues.gameState !== GameState.FINISHED &&
-			!parentGameValues.winner
-		) {
-			dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload: parentGameValues });
+		const { playerOne, playerTwo, gameState } = parentGameValues;
+		if (!playerOne.id) {
+			const payload = {
+				...parentGameValues,
+				playerOne: {
+					...parentGameValues.playerOne,
+					name: userData?.playerName!,
+					id: userData?.userId!,
+				},
+			};
+			dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload });
+			return;
 		}
+
+		if (!!playerOne.id && !playerTwo.id && playerOne.id !== userData!.userId) {
+			const payload = {
+				...parentGameValues,
+				playerTwo: {
+					...parentGameValues.playerTwo,
+					name: userData?.playerName!,
+					id: userData?.userId!,
+				},
+			};
+			dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload });
+			return;
+		}
+
+		if (playerOne.id && playerTwo.id && gameState === GameState.NOT_STARTED) {
+			const payload = { ...parentGameValues, gameState: GameState.IN_PROGRESS };
+			dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload });
+			return;
+		}
+
+		dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload: parentGameValues });
 	}, [parentGameValues]);
 
 	useEffect(() => {
-		// Listen to end of game and update player score + determine winner
-		if (gameValues?.gameState === GameState.FINISHED && !gameValues.winner) {
-			dispatch({ type: ActionTypes.CALCULATE_SCORE });
-		}
-	}, [gameValues]);
-
-	const debouncedUpdate = useCallback(
-		debounce(async (gameId, gameValues) => {
+		const debouncedUpdate = debounce(async () => {
 			await client.from("sessions_table").update(gameValues).eq("id", gameId);
 			setIsDebouncing(false);
-		}, 300),
-		[]
-	);
+		}, 300);
+
+		if (areGamesEqual(gameValues, parentGameValues) || isDebouncing) return;
+		console.log("debounce would happen");
+		setIsDebouncing(true);
+		debouncedUpdate();
+	}, [gameValues, gameId]);
 
 	useEffect(() => {
-		if (!!gameId && !isDebouncing) {
-			if (!areGamesEqual(gameValues, parentGameValues)) {
-				setIsDebouncing(true);
-				debouncedUpdate(gameId, gameValues);
-			}
+		const postEndGame = async () => {
+			await handleEndOfGame(gameValues);
+		};
+		if (gameValues?.gameState !== GameState.FINISHED) return;
+		// Listen to end of game and update player score + determine winner
+		if (!gameValues.winner) {
+			dispatch({ type: ActionTypes.CALCULATE_SCORE });
 		}
-	}, [gameId, gameValues]);
+		// Check if the game state is FINISHED and there's a winner
+		if (gameValues.winner) {
+			postEndGame();
+		}
+	}, [gameValues]);
 
 	const currentPlayer = useMemo(
 		() =>
 			gameValues.playerTurn === PlayerTurn.PLAYER_ONE ? gameValues.playerOne : gameValues.playerTwo,
-		[gameValues.playerTurn]
+		[gameValues]
 	);
 	const onMove = currentPlayer?.id === userData?.userId;
 

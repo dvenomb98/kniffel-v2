@@ -55,9 +55,5 @@ export const initialGameValues: GameType = {
   gameState: GameState.NOT_STARTED,
   round: 1,
   winner: null,
-  id: null,
-  updates: {
-    winner: false,
-    loser: false
-  }
+  id: null
 };

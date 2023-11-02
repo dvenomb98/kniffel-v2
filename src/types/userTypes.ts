@@ -3,6 +3,14 @@ export interface UserMetaData {
     condition_agreement: boolean;
   }
 
+  export interface GameHistory {
+    id: string
+    won: boolean
+    score: number
+    opponentId: string
+    opponentScore: number
+  }
+
   export interface UserData {
     userId: string;
     email: string;
@@ -11,4 +19,5 @@ export interface UserMetaData {
       wins: number
       losts: number
     }
+    gameHistory: GameHistory[]
   }
