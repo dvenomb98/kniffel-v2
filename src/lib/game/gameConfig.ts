@@ -56,4 +56,8 @@ export const initialGameValues: GameType = {
   round: 1,
   winner: null,
   id: null,
+  updates: {
+    winner: false,
+    loser: false
+  }
 };

@@ -129,9 +129,9 @@ import {
         return state;
   
       case ActionTypes.CALCULATE_SCORE:
-        const { gameState, playerOne: player_1, playerTwo: player_2 } = state;
+        const { gameState, playerOne: player_1, playerTwo: player_2, winner } = state;
   
-        if (gameState !== GameState.FINISHED) return state;
+        if (gameState !== GameState.FINISHED || !!winner) return state;
   
         const player_one_final_score = calculateFinalScore(player_1.stats);
         const player_two_final_score = calculateFinalScore(player_2.stats);
@@ -150,8 +150,8 @@ import {
           },
           winner:
             player_one_final_score.final_score > player_two_final_score.final_score
-              ? PlayerTurn.PLAYER_ONE
-              : PlayerTurn.PLAYER_TWO,
+              ? player_1.id
+              : player_2.id,
         };
   
       default:

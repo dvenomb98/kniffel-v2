@@ -56,35 +56,34 @@ export const GameProvider = ({
 	useEffect(() => {
 		if (
 			!areGamesEqual(gameValues, parentGameValues) &&
-			gameValues.gameState !== GameState.FINISHED
+			parentGameValues.gameState !== GameState.FINISHED &&
+			!parentGameValues.winner
 		) {
 			dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload: parentGameValues });
 		}
 	}, [parentGameValues]);
 
 	useEffect(() => {
-		if (
-			gameValues?.gameState === GameState.FINISHED &&
-			!gameValues.playerOne.final_score &&
-			!gameValues.playerTwo.final_score
-		) {
+		// Listen to end of game and update player score + determine winner
+		if (gameValues?.gameState === GameState.FINISHED && !gameValues.winner) {
 			dispatch({ type: ActionTypes.CALCULATE_SCORE });
 		}
 	}, [gameValues]);
 
 	const debouncedUpdate = useCallback(
 		debounce(async (gameId, gameValues) => {
-			console.log("Debounce would happen");
 			await client.from("sessions_table").update(gameValues).eq("id", gameId);
 			setIsDebouncing(false);
-		}, 500),
+		}, 300),
 		[]
 	);
 
 	useEffect(() => {
 		if (!!gameId && !isDebouncing) {
-			setIsDebouncing(true);
-			debouncedUpdate(gameId, gameValues);
+			if (!areGamesEqual(gameValues, parentGameValues)) {
+				setIsDebouncing(true);
+				debouncedUpdate(gameId, gameValues);
+			}
 		}
 	}, [gameId, gameValues]);
 

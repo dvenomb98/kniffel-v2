@@ -5,6 +5,7 @@ import { GameState, GameType } from "@/types/gameTypes";
 import React, { FC, useEffect, useState } from "react";
 import InnerGame from "./InnerGame";
 import { UserData } from "@/types/userTypes";
+import { handleEndOfGame } from "@/lib/game/utils";
 
 interface GameProps {
 	userData: UserData;
@@ -20,7 +21,6 @@ const Game: FC<GameProps> = ({ userData, gameId, initialValues }) => {
 		// Setting initial values
 		if (!game && !!initialValues) {
 			let gameData = initialValues;
-
 			const { playerOne, playerTwo, gameState } = gameData;
 			// Checking for both players
 			if (!playerOne.id) {
@@ -41,20 +41,34 @@ const Game: FC<GameProps> = ({ userData, gameId, initialValues }) => {
 
 	useEffect(() => {
 		const subscription = client
-			.channel("public:sessions_table")
-			.on(
-				"postgres_changes",
-				{ event: "*", schema: "public", table: "sessions_table", filter: `id=eq.${gameId}` },
-				(payload) => {
-					console.log(payload, "PAYLOAD RECIEVED");
-					setGame(payload.new as GameType);
+		  .channel("public:sessions_table")
+		  .on(
+			"postgres_changes",
+			{ event: "*", schema: "public", table: "sessions_table", filter: `id=eq.${gameId}` },
+			async (payload) => {
+			  console.log(payload, "PAYLOAD RECEIVED");
+			  const newPayload = payload.new as GameType;
+	  
+			  setGame(newPayload);
+	  
+			  // Check if the game state is FINISHED and there's a winner
+			  if (newPayload.gameState === GameState.FINISHED && newPayload.winner) {
+				const isWinner = newPayload.winner === userId;
+				const shouldUpdateWinner = isWinner && !newPayload.updates.winner;
+				const shouldUpdateLoser = !isWinner && !newPayload.updates.loser;
+	  
+				if (shouldUpdateWinner || shouldUpdateLoser) {
+				  await handleEndOfGame(newPayload);
 				}
-			)
-			.subscribe();
+			  }
+			}
+		  )
+		  .subscribe();
+	  
 		return () => {
-			client.removeChannel(subscription);
+		  subscription.unsubscribe(); // This might vary depending on the client's implementation
 		};
-	}, [gameId, userId]);
+	  }, [gameId, userId]);
 
 	return (
 		!!game && (

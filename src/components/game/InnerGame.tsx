@@ -29,9 +29,12 @@ const InnerGame = () => {
 				</InnerGameLayout>
 			)}
 			{gameState === GameState.FINISHED && (
-				<div className="flex justify-around w-full">
+				<div className="w-full flex flex-col gap-5">
+				<GameNav />
+				<div className="flex justify-between w-full">
 					<StatsBar currentPlayer={gameValues?.playerOne!} />
 					<StatsBar currentPlayer={gameValues?.playerTwo!} />
+				</div>
 				</div>
 			)}
 			<pre className="overflow-auto">{JSON.stringify(gameValues, null, 4)}</pre>

@@ -55,7 +55,7 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
     <button
       role="button"
       onClick={handleAddScore}
-      disabled={!onMove || !!value || isDebouncing}
+      disabled={!onMove || !!value || isDebouncing || (!addScore && !!rollsLeft)}
       className={cn(
         'flex items-center gap-2 justify-between border p-2 transition-all ease-in-out rounded-md disabled:cursor-default',
         addScore

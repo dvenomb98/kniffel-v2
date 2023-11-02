@@ -1,9 +1,8 @@
-import { nanoid } from "nanoid";
 import { initialGameValues } from "./gameConfig";
 import { URLS } from "../urls";
 import client from "../supabase/client";
 import { GameType } from "@/types/gameTypes";
-import isEqual from 'lodash.isequal';
+import isEqual from "lodash.isequal";
 
 const generateGameId = () => {
 	const typedArray = new Uint8Array(5);
@@ -13,10 +12,10 @@ const generateGameId = () => {
 
 export const createNewGameSession = async () => {
 	try {
-		const gameId = generateGameId()
+		const gameId = generateGameId();
 		const { error } = await client
 			.from("sessions_table")
-			.insert({ ...initialGameValues, id: gameId});
+			.insert({ ...initialGameValues, id: gameId });
 		if (error) throw new Error(error.message);
 		const gameUrl = `${URLS.GAME}/${gameId}`;
 		return gameUrl;
@@ -27,8 +26,15 @@ export const createNewGameSession = async () => {
 };
 
 export const areGamesEqual = (game1: GameType, game2: GameType) => {
-    return isEqual(game1, game2);
-}
+	return isEqual(game1, game2);
+};
 
+export const handleEndOfGame = async (values: GameType) => {
+	
+	const response = await fetch("api/handle-end-of-game", {
+		body: JSON.stringify(values),
+		method: "POST",
+	});
 
-
+	return response.ok;
+};

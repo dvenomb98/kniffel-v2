@@ -6,13 +6,13 @@ import { GameState, Player } from "@/types/gameTypes";
 import { cn } from "@/lib/utils";
 
 interface StatsBarProps {
-    currentPlayer: Player
+	currentPlayer: Player;
 }
 
-const StatsBar: FC<StatsBarProps> = ({currentPlayer}) => {
-	const { gameValues} = useGameContext();
+const StatsBar: FC<StatsBarProps> = ({ currentPlayer }) => {
+	const { gameValues } = useGameContext();
 
-	const isWinner = gameValues?.winner === currentPlayer.order;
+	const isWinner = gameValues?.winner === currentPlayer.id;
 	const gameEnded = gameValues!.gameState === GameState.FINISHED;
 
 	return (
@@ -30,21 +30,22 @@ const StatsBar: FC<StatsBarProps> = ({currentPlayer}) => {
 			</div>
 			{!!gameEnded && !!currentPlayer.final_score && (
 				<div>
-					<p className="flex gap-2">
-						Bonus score: <span className="text-primary-gold">{currentPlayer.bonus_score || 0}</span>
+					<p className="flex gap-2 text-gray">
+						Bonus score:{" "}
+						<span className="text-default-color">{currentPlayer.bonus_score || 0}</span>
 					</p>
-					<p className="flex gap-2">
-						Final score: <span className="text-primary-gold">{currentPlayer.final_score}</span>
+					<p className="flex gap-2 text-gray">
+						Final score: <span className="text-default-color">{currentPlayer.final_score}</span>
 					</p>
-					<p className={cn(isWinner ? "text-primary-gold" : "text-secondary")}>
-						{isWinner ? "Winner" : "Looser"}
+					<p className={cn(isWinner ? "text-primary" : "text-gray")}>
+						{isWinner ? "Winner" : "Loser"}
 					</p>
 				</div>
 			)}
 
 			<div className="flex flex-col gap-4">
-				<UpperLayerScore currentPlayer={currentPlayer}/>
-				<BottomLayerScore currentPlayer={currentPlayer}/>
+				<UpperLayerScore currentPlayer={currentPlayer} />
+				<BottomLayerScore currentPlayer={currentPlayer} />
 			</div>
 		</div>
 	);
