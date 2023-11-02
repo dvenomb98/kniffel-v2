@@ -36,7 +36,6 @@ const Game: FC<GameProps> = ({ userData, gameId, initialValues }) => {
 			}
 
 			setGame(gameData);
-			console.log(gameData);
 		}
 	}, [initialValues]);
 

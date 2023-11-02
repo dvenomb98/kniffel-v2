@@ -2,6 +2,8 @@ import { nanoid } from "nanoid";
 import { initialGameValues } from "./gameConfig";
 import { URLS } from "../urls";
 import client from "../supabase/client";
+import { GameType } from "@/types/gameTypes";
+import isEqual from 'lodash.isequal';
 
 const generateGameId = () => {
 	const typedArray = new Uint8Array(5);
@@ -23,6 +25,10 @@ export const createNewGameSession = async () => {
 		return null;
 	}
 };
+
+export const areGamesEqual = (game1: GameType, game2: GameType) => {
+    return isEqual(game1, game2);
+}
 
 
 

@@ -96,11 +96,11 @@ import {
   
           return {
             ...defaultResetState,
-            player_one:
+            playerOne:
               playerTurn === PlayerTurn.PLAYER_ONE
                 ? { ...playerOne, stats: { ...playerOne.stats, upper_layer: updatedLayer } }
                 : playerOne,
-            player_two:
+            playerTwo:
               playerTurn === PlayerTurn.PLAYER_TWO
                 ? { ...playerTwo, stats: { ...playerTwo.stats, upper_layer: updatedLayer } }
                 : playerTwo,
@@ -115,11 +115,11 @@ import {
   
           return {
             ...defaultResetState,
-            player_one:
+            playerOne:
               playerTurn === PlayerTurn.PLAYER_ONE
                 ? { ...playerOne, stats: { ...playerOne.stats, bottom_layer: updatedLayer } }
                 : playerOne,
-            player_two:
+            playerTwo:
               playerTurn === PlayerTurn.PLAYER_TWO
                 ? { ...playerTwo, stats: { ...playerTwo.stats, bottom_layer: updatedLayer } }
                 : playerTwo,
@@ -138,12 +138,12 @@ import {
   
         return {
           ...state,
-          player_one: {
+          playerOne: {
             ...player_1,
             final_score: player_one_final_score.final_score,
             bonus_score: player_one_final_score.bonus_points,
           },
-          player_two: {
+          playerTwo: {
             ...player_2,
             final_score: player_two_final_score.final_score,
             bonus_score: player_two_final_score.bonus_points,

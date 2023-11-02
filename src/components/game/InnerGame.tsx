@@ -3,18 +3,38 @@ import { useGameContext } from "@/providers/GameProvider";
 import React from "react";
 import GameNav from "./inner/GameNav";
 import Board from "./inner/Board";
+import StatsBar from "./inner/StatsBar";
+import InnerGameLayout from "./inner/InnerGameLayout";
+import { GameState } from "@/types/gameTypes";
+import { Skeleton } from "../ui/Skeleton";
 
 const InnerGame = () => {
-	const { gameValues } = useGameContext();
+	const { gameValues, currentPlayer } = useGameContext();
+	const { gameState } = gameValues!;
 
 	return (
 		<section className="overflow-x-auto w-full">
-			<div className="grid grid-cols-6 gap-2 min-w-[900px] ">
-				<GameNav />
-				<Board />
-				<div className="col-span-2 border h-[600px] bg-yellow-500 w-full" />
-			</div>
-      	<pre className='overflow-auto'>{JSON.stringify(gameValues, null, 4)}</pre>
+			{gameState === GameState.NOT_STARTED && (
+				<InnerGameLayout>
+					<GameNav />
+					<Skeleton className="col-span-4 h-[800px]" />
+					<Skeleton className="col-span-2 h-[800px]" />
+				</InnerGameLayout>
+			)}
+			{gameState === GameState.IN_PROGRESS && (
+				<InnerGameLayout>
+					<GameNav />
+					<Board />
+					<StatsBar currentPlayer={currentPlayer} />
+				</InnerGameLayout>
+			)}
+			{gameState === GameState.FINISHED && (
+				<div className="flex justify-around w-full">
+					<StatsBar currentPlayer={gameValues?.playerOne!} />
+					<StatsBar currentPlayer={gameValues?.playerTwo!} />
+				</div>
+			)}
+			<pre className="overflow-auto">{JSON.stringify(gameValues, null, 4)}</pre>
 		</section>
 	);
 };

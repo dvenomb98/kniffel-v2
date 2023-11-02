@@ -5,13 +5,14 @@ import { useGameContext } from "@/providers/GameProvider";
 import React, { FC } from "react";
 
 const BoardNav: FC = () => {
-	const { gameValues, dispatch, currentPlayer, onMove, isDebouncing } = useGameContext();
-	const { gameState, rollsLeft, round } = gameValues!;
+	const { gameValues, dispatch, onMove, isDebouncing } = useGameContext();
+	const {  rollsLeft, round } = gameValues!;
 	return (
 		<div className="flex items-center justify-between w-full">
 			<Button
 				onClick={() => dispatch({ type: ActionTypes.ROLL_DICE })}
 				variant="outline"
+				loading={isDebouncing}
 				size="lg"
 				disabled={!gameValues?.rollsLeft || !onMove || isDebouncing}
 			>
