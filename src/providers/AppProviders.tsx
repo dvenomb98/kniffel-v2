@@ -10,7 +10,7 @@ interface AppProvidersProps {
 const AppProviders: FC<AppProvidersProps> = ({ children }) => {
   return (
     <>
-      <ThemeProvider attribute="class" disableTransitionOnChange defaultTheme="dark" enableSystem>
+      <ThemeProvider attribute="class" disableTransitionOnChange defaultTheme="dark">
         {children}
         <Toaster />
       </ThemeProvider>

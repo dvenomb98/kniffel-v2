@@ -1,7 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, Suspense } from "react";
 import CreateGameSession from "../game/CreateGameSession";
-import Leaderboards from "./Leaderboards";
 import Tabs from "../ui/Tabs";
+import LeaderboardLayout from "./LeadboardLayout";
+import LeaderboardSkeletons from "../skeletons/LeaderboardSkeletons";
 
 enum Values {
 	CREATE_GAME = "create_game",
@@ -17,7 +18,11 @@ const tabs = [
 	{
 		value: Values.LEADERBOARDS,
 		label: "View leaderboards",
-		children: <Leaderboards />,
+		children: (
+			<Suspense fallback={<LeaderboardSkeletons />}>
+				<LeaderboardLayout />
+			</Suspense>
+		),
 	},
 ];
 

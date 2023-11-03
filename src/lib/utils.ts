@@ -8,10 +8,9 @@ export function cn(...inputs: ClassValue[]) {
 export const getErrorMessage = (error: any) => {
   return {
     message: `Error occured: ${error?.message || "Unknown error"}`,
-    cause: error?.cause || null,
-    hint: error?.hint || null,
-    code: error?.code || null,
-
+    cause: error?.cause as string || null,
+    hint: error?.hint as string || null,
+    code: error?.code as string || null,
   }
 
 }

@@ -77,4 +77,5 @@ export interface GameType {
 	round: number;
 	winner: string | null;
 	id: string | null;
+	created_at: Date
 }

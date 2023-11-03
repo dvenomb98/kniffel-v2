@@ -37,7 +37,10 @@ export async function POST(request: Request) {
 				won: userData.userId === gameValues.winner,
 				score: playerData.final_score,
 				opponentId: otherPlayerData.id,
+				opponentName: otherPlayerData.name,
 				opponentScore: otherPlayerData.final_score,
+				createdAt: gameValues?.created_at
+
 			},
 		];
 

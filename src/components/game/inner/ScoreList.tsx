@@ -13,9 +13,10 @@ interface ScoreListProps {
   object_key: ScoreKeys;
   layer: Layer;
   currentPlayer: Player;
+  inView?: boolean
 }
 
-const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, currentPlayer }) => {
+const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, currentPlayer, inView }) => {
   const { gameValues, dispatch, onMove, isDebouncing } = useGameContext();
 
   const addScore = useMemo(
@@ -38,8 +39,8 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
   const { rollsLeft } = gameValues;
   const isCancelled = value === 'canceled';
 
-  const canCancelScore = !addScore && !correctLayerScoreValue && !rollsLeft && !value && gameValues.gameState !== GameState.FINISHED
-  const lowerOpacity = !onMove && gameValues.gameState !== GameState.FINISHED
+  const canCancelScore = !addScore && !correctLayerScoreValue && !rollsLeft && !value
+  const lowerOpacity = !onMove && gameValues.gameState !== GameState.FINISHED && !inView
 
   const handleAddScore = () => {
     dispatch({
@@ -59,15 +60,15 @@ const ScoreList: FC<ScoreListProps> = ({ title, value, object_key, layer, curren
     <button
       role="button"
       onClick={handleAddScore}
-      disabled={!onMove || !!value || isDebouncing || (!addScore && !!rollsLeft)}
+      disabled={!onMove || !!value || isDebouncing || (!addScore && !!rollsLeft) || inView}
       className={cn(
         'flex items-center gap-2 justify-between border p-2 transition-all ease-in-out rounded-md disabled:cursor-default',
         addScore
           ? 'text-primary border-primary border-solid hover:border-primary-dark cursor-pointer'
           : canCancelScore
           ? 'border-error-light hover:border-error-dark cursor-pointer text-error hover:text-error-dark'
-          : 'border-divider opacity-70',
-        !!value && "dark:bg-secondary-dark bg-secondary/50",
+          : 'border-divider',
+        !!value && "dark:bg-secondary-dark bg-secondary-light",
         lowerOpacity && "opacity-70"
       )}
     >

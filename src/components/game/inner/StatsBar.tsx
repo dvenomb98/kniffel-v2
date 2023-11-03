@@ -7,27 +7,30 @@ import { cn } from "@/lib/utils";
 
 interface StatsBarProps {
 	currentPlayer: Player;
+	inView?: boolean;
 }
 
-const StatsBar: FC<StatsBarProps> = ({ currentPlayer }) => {
+const StatsBar: FC<StatsBarProps> = ({ currentPlayer, inView }) => {
 	const { gameValues } = useGameContext();
-
 	const isWinner = gameValues?.winner === currentPlayer.id;
 	const gameEnded = gameValues!.gameState === GameState.FINISHED;
 
 	return (
 		<div
 			className={cn(
-				"flex flex-col gap-2 p-2 border justify-between rounded-md col-span-2",
-				isWinner ? "border-primary" : "border-divider",
-				gameEnded && "w-[400px]"
+				"flex flex-col gap-2 p-2 border justify-between rounded-md col-span-2 border-divider",
+				isWinner && "border-success",
+				gameEnded && "w-[400px]",
+				!isWinner && gameEnded && "border-error"
 			)}
 		>
-			<div className="text-gray flex">
-				<p className="flex gap-2">
-					On turn: <span className="text-default-color">{currentPlayer.name}</span>
-				</p>
-			</div>
+			{!inView && (
+				<div className="text-gray flex">
+					<p className="flex gap-2">
+						Player: <span className="text-default-color">{currentPlayer.name}</span>
+					</p>
+				</div>
+			)}
 			{!!gameEnded && !!currentPlayer.final_score && (
 				<div>
 					<p className="flex gap-2 text-gray">
@@ -37,15 +40,15 @@ const StatsBar: FC<StatsBarProps> = ({ currentPlayer }) => {
 					<p className="flex gap-2 text-gray">
 						Final score: <span className="text-default-color">{currentPlayer.final_score}</span>
 					</p>
-					<p className={cn(isWinner ? "text-primary" : "text-gray")}>
+					<p className={cn(isWinner ? "text-success" : "text-error")}>
 						{isWinner ? "Winner" : "Loser"}
 					</p>
 				</div>
 			)}
 
 			<div className="flex flex-col gap-4">
-				<UpperLayerScore currentPlayer={currentPlayer} />
-				<BottomLayerScore currentPlayer={currentPlayer} />
+				<UpperLayerScore inView={inView} currentPlayer={currentPlayer} />
+				<BottomLayerScore inView={inView}currentPlayer={currentPlayer} />
 			</div>
 		</div>
 	);

@@ -12,11 +12,12 @@ const BoardNav: FC = () => {
 			<Button
 				onClick={() => dispatch({ type: ActionTypes.ROLL_DICE })}
 				variant="outline"
+				className="min-w-[200px]"
 				loading={isDebouncing}
 				size="lg"
 				disabled={!gameValues?.rollsLeft || !onMove || isDebouncing}
 			>
-				Roll dices
+				{onMove ? "Roll dices" : "Opponent turn"}
 			</Button>
 			<p className="text-gray">
 				Rolls left: <span className="text-default-color">{rollsLeft}</span>

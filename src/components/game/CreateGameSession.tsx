@@ -34,7 +34,7 @@ const CreateGameSession: FC = () => {
 	};
 
 	return (
-		<div className="h-[600px] w-full border border-divider rounded-md flex items-center justify-center">
+		<div className="h-[600px] w-full border border-divider rounded-md flex items-center justify-center bg-secondary-extralight dark:bg-secondary-extradark">
 			{sessionUrl ? (
 				<div className="flex flex-col gap-5 text-center">
 					<h4 className="h4">Share this link to start the game</h4>

@@ -21,3 +21,13 @@ export interface UserMetaData {
     }
     gameHistory: GameHistory[]
   }
+
+
+  export interface Leaderboard {
+    userId: string
+    playerName: string
+    statistics: {
+      wins: number
+      losts: number
+    }
+  }

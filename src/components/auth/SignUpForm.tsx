@@ -6,10 +6,11 @@ import { Input } from "../ui/form/Input";
 import { Button } from "../ui/Button";
 import { Checkbox } from "../ui/form/Checkbox";
 import { useToast } from "@/hooks/useToast";
-import client from "@/lib/supabase/client";
 import { API_URLS } from "@/lib/urls";
 import useFieldValidation from "@/hooks/useValidation";
 import * as yup from "yup";
+import { baseUrl} from "@/lib/config";
+import { SignUpResponse } from "@/types/responseTypes";
 
 export interface SignUpValues {
 	email: string;
@@ -43,41 +44,22 @@ const SignUpForm: FC = () => {
 
 	const handleSignUp = async (values: SignUpValues, resetForm: () => void) => {
 		const { email, password, data } = values;
-		const { data: signUpData, error } = await client.auth.signUp({
-			email,
-			password,
-			options: {
-				emailRedirectTo: `${process.env.NEXT_PUBLIC_MAIN_URL}${API_URLS.CALLBACK}`,
-				data,
-			},
+		const response = await fetch(baseUrl + API_URLS.HANDLE_SIGN_UP, {
+			body: JSON.stringify({ email, password, data }),
+			method: "POST",
 		});
-		if (error) {
-			toast({ title: "Error happened", description: error.message, variant: "destructive" });
+		const resData: SignUpResponse = await response.json();
+		if (response.status === 500) {
+			toast({ title: "Error happened", description: resData.message, variant: "destructive" });
 			return;
 		}
 
-		if (!signUpData?.user?.identities?.length) {
+		if (response.status === 429) {
 			toast({
 				title: "Email already exists",
 				description: "Sign in or use different email",
 				variant: "destructive",
 			});
-			return;
-		}
-		const { error: insertError } = await client.from("users_table").insert([
-			{
-				email: signUpData.user.email,
-				userId: signUpData.user.id,
-				playerName: data.playerName,
-				statistics: {
-					wins: 0,
-					losts: 0,
-				},
-			},
-		] as UserData[]);
-
-		if (insertError) {
-			toast({ title: "Error happened", description: insertError.message, variant: "destructive" });
 			return;
 		}
 

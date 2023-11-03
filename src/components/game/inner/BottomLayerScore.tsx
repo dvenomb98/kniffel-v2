@@ -8,9 +8,10 @@ const layerType = 'bottom_layer';
 
 interface BottomLayerScoreProps {
   currentPlayer: Player
+  inView?: boolean
 }
 
-const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer}) => {
+const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer, inView}) => {
  
   const {
     threes_of_kind,
@@ -30,6 +31,7 @@ const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer}) => {
         layer={layerType}
         object_key="threes_of_kind"
         currentPlayer={currentPlayer}
+        inView={inView}
       />
       <ScoreList
         title="4 of kind"
@@ -37,6 +39,7 @@ const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer}) => {
         layer={layerType}
         object_key="fours_of_kind"
         currentPlayer={currentPlayer}
+        inView={inView}
       />
       <ScoreList
         title="Small straight"
@@ -44,6 +47,7 @@ const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer}) => {
         layer={layerType}
         object_key="small_straight"
         currentPlayer={currentPlayer}
+        inView={inView}
       />
       <ScoreList
         title="Large straight"
@@ -51,6 +55,7 @@ const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer}) => {
         layer={layerType}
         object_key="large_straight"
         currentPlayer={currentPlayer}
+        inView={inView}
       />
       <ScoreList
         title="Full house"
@@ -58,6 +63,7 @@ const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer}) => {
         layer={layerType}
         object_key="full_house"
         currentPlayer={currentPlayer}
+        inView={inView}
       />
       <ScoreList
         title="Yahtzee"
@@ -65,6 +71,7 @@ const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer}) => {
         layer={layerType}
         object_key="yahtzee"
         currentPlayer={currentPlayer}
+        inView={inView}
       />
       <ScoreList
         title="Chance"
@@ -72,6 +79,7 @@ const BottomLayerScore: FC<BottomLayerScoreProps> = ({currentPlayer}) => {
         layer={layerType}
         object_key="chance"
         currentPlayer={currentPlayer}
+        inView={inView}
       />
     </ScoreLayout>
   );

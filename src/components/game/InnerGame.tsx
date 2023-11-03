@@ -29,7 +29,7 @@ const InnerGame = () => {
 				</InnerGameLayout>
 			)}
 			{gameState === GameState.FINISHED && (
-				<div className="w-full flex flex-col gap-5">
+				<div className="w-full flex flex-col gap-5 min-w-[900px]">
 				<GameNav />
 				<div className="flex justify-between w-full">
 					<StatsBar currentPlayer={gameValues?.playerOne!} />
@@ -37,7 +37,7 @@ const InnerGame = () => {
 				</div>
 				</div>
 			)}
-			<pre className="overflow-auto">{JSON.stringify(gameValues, null, 4)}</pre>
+			{/* <pre className="overflow-auto">{JSON.stringify(gameValues, null, 4)}</pre> */}
 		</section>
 	);
 };

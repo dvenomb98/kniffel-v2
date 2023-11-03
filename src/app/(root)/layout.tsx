@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import AppProviders from '@/providers/AppProviders';
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/shared/Navbar';
+import Footer from "@/components/shared/Footer";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className='min-h-screen'>
           {children}
           </main>
+          <Footer />
         </AppProviders>
       </body>
     </html>
