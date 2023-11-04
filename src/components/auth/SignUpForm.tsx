@@ -6,7 +6,7 @@ import { Input } from "../ui/form/Input";
 import { Button } from "../ui/Button";
 import { Checkbox } from "../ui/form/Checkbox";
 import { useToast } from "@/hooks/useToast";
-import { API_URLS } from "@/lib/urls";
+import { API_URLS, AUTH_URLS } from "@/lib/urls";
 import useFieldValidation from "@/hooks/useValidation";
 import * as yup from "yup";
 import { baseUrl} from "@/lib/config";
@@ -44,7 +44,7 @@ const SignUpForm: FC = () => {
 
 	const handleSignUp = async (values: SignUpValues, resetForm: () => void) => {
 		const { email, password, data } = values;
-		const response = await fetch(baseUrl + API_URLS.HANDLE_SIGN_UP, {
+		const response = await fetch(baseUrl + AUTH_URLS.HANDLE_SIGN_UP, {
 			body: JSON.stringify({ email, password, data }),
 			method: "POST",
 		});

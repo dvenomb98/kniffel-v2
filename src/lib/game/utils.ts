@@ -1,5 +1,5 @@
 import { initialGameValues } from "./gameConfig";
-import { URLS } from "../urls";
+import { API_URLS, URLS } from "../urls";
 import client from "../supabase/client";
 import { GameType } from "@/types/gameTypes";
 import isEqual from "lodash.isequal";
@@ -32,7 +32,7 @@ export const areGamesEqual = (game1: GameType, game2: GameType) => {
 };
 
 export const handleEndOfGame = async (values: GameType) => {
-	const response = await fetch(`${baseUrl}/api/handle-end-of-game`, {
+	const response = await fetch(`${baseUrl}${API_URLS.HANDLE_END_GAME}`, {
 		body: JSON.stringify(values),
 		method: "POST",
 	});

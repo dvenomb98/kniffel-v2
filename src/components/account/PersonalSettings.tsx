@@ -15,11 +15,18 @@ interface PersonalSettingsProps {
 const PersonalSettings: FC<PersonalSettingsProps> = ({ userData }) => {
 	const { toast } = useToast();
 
-	const { playerName, email} = userData;
+	const { playerName, email } = userData;
 
-	const handleSubmit = async (playerName: string) => {
+	const handleSubmit = async (playerName: string, avatar: string) => {
+		const formData = new FormData();
+
+		formData.append("playerName", playerName);
+		if (avatar) {
+			formData.append("avatar", avatar);
+		}
+
 		const response = await fetch(baseUrl + API_URLS.HANDLE_USER_DATA_CHANGE, {
-			body: JSON.stringify(playerName),
+			body: formData,
 			method: "POST",
 		});
 		if (!response.ok) {
@@ -39,13 +46,21 @@ const PersonalSettings: FC<PersonalSettingsProps> = ({ userData }) => {
 
 	return (
 		<Formik
-			initialValues={{ playerName, email }}
-			onSubmit={async (values) => await handleSubmit(values.playerName)}
+			initialValues={{ playerName, email, avatar: null }}
+			onSubmit={async (values) => await handleSubmit(values.playerName, values.avatar!)}
 		>
-			{({ isSubmitting }) => (
+			{({ isSubmitting, setFieldValue, values }) => (
 				<Form className="flex flex-col gap-5">
 					<Input name="email" label="Email" disabled />
 					<Input name="playerName" label="Player name" />
+					<Input
+						onChange={(e) => setFieldValue("avatar", e.target.files?.[0])}
+						name="avatar"
+						type="file"
+						value={undefined}
+						label="Upload avatar"
+						accept="image/png, image/jpeg, image/webp, image/jpg"
+					/>
 					<Button className="w-[200px]" loading={isSubmitting} type="submit">
 						Submit
 					</Button>

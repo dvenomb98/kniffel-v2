@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 		// Prepare updates for the user statistics.
 		const statsUpdate = {
 			wins: userData.statistics.wins + (isWinner ? 1 : 0),
-			losts: userData.statistics.losts + (isWinner ? 1 : 0),
+			losts: userData.statistics.losts + (isWinner ? 0 : 1),
 		};
 
 		const historyUpdate = [

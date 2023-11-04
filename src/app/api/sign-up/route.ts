@@ -1,6 +1,6 @@
 import { baseUrl } from "@/lib/config";
 import { createClient } from "@/lib/supabase/server";
-import { API_URLS } from "@/lib/urls";
+import { API_URLS, AUTH_URLS } from "@/lib/urls";
 import { UserData } from "@/types/userTypes";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 			email,
 			password,
 			options: {
-				emailRedirectTo: baseUrl + API_URLS.CALLBACK,
+				emailRedirectTo: baseUrl + AUTH_URLS.CALLBACK,
 			},
 		});
 
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
 				losts: 0,
 			},
 			gameHistory: [],
+			avatarUrl: ""
 		} as UserData;
 
 		const { error: insertError } = await client.from("users_table").insert([valuesToInsert]);

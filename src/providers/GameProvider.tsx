@@ -109,6 +109,7 @@ export const GameProvider = ({
 		// Listen to end of game and update player score + determine winner
 		if (!gameValues.winner) {
 			dispatch({ type: ActionTypes.CALCULATE_SCORE });
+			return
 		}
 		// Check if the game state is FINISHED and there's a winner
 		if (gameValues.winner) {

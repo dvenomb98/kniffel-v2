@@ -63,11 +63,14 @@ export const getLeaderBoardData = async () => {
 	}
 
 	const usersData = data as UserData[];
-	const publicInfo = usersData.map(({ statistics, playerName, userId, ...rest }) => ({
+	const publicInfo = usersData.map(({ statistics, playerName, avatarUrl, userId, ...rest }) => ({
 		statistics,
 		playerName,
 		userId,
+		avatarUrl,
 	}));
+
+
 	const sortedData = publicInfo.sort((a, b) => b.statistics.wins - a.statistics.wins);
 
 	return sortedData.slice(0, 10);

@@ -1,7 +1,10 @@
 import { cn } from "@/lib/utils";
 import { Leaderboard } from "@/types/userTypes";
 import { AwardIcon, CrownIcon } from "lucide-react";
+import Image from "next/image";
 import React, { FC } from "react";
+import avatar_placeholder from "public/avatar_placeholder.jpg";
+import Avatar from "../ui/Avatar";
 
 interface LeaderboardCardProps {
 	data: Leaderboard;
@@ -12,7 +15,6 @@ const getIcon = (i: number) => {
 	switch (i) {
 		case 0:
 			return CrownIcon;
-
 		case 1:
 			return AwardIcon;
 
@@ -20,12 +22,12 @@ const getIcon = (i: number) => {
 			return AwardIcon;
 
 		default:
-			return null;
+			return AwardIcon;
 	}
 };
 
 const LeadboardCard: FC<LeaderboardCardProps> = ({ data, i }) => {
-	const { userId, statistics, playerName } = data;
+	const { userId, statistics, playerName, avatarUrl } = data;
 	const Icon = getIcon(i);
 
 	return (
@@ -43,7 +45,10 @@ const LeadboardCard: FC<LeaderboardCardProps> = ({ data, i }) => {
 					) : (
 						<div className="w-5 h-5" />
 					)}
-					<h4 className="h4 sm:base">{playerName}</h4>
+					<div className="flex items-center gap-4">
+						<Avatar src={avatarUrl} alt={playerName} />
+						<h4 className="h4 sm:base">{playerName}</h4>
+					</div>
 				</div>
 				<div className="flex gap-5 items-center">
 					<p className="font-medium sm:small">{statistics.wins} W</p>

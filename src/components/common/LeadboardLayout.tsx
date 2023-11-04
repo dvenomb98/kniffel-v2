@@ -1,5 +1,5 @@
 import { getLeaderBoardData } from "@/lib/server-utils";
-import React, { FC, Suspense } from "react";
+import React, { FC } from "react";
 import { RocketIcon } from "lucide-react";
 import LeadboardCard from "./LeadboardCard";
 
