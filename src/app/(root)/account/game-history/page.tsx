@@ -8,7 +8,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/Table";
-import { getUserData } from "@/lib/server-utils";
+import { getUserData } from "@/lib/server-utils/userUtils";
 import { URLS } from "@/lib/urls";
 import { NextPage } from "next";
 import Link from "next/link";
@@ -17,11 +17,11 @@ import React from "react";
 const GameHistoryPage: NextPage = async () => {
 	const {
 		userData: { gameHistory },
-	} = await getUserData();
+	} = await getUserData(true);
 
 	return (
 		<AccountPageLayout header="Game history">
-			{gameHistory.length ? (
+			{gameHistory?.length ? (
 				<Table>
 					<TableCaption>A list of your game history</TableCaption>
 					<TableHeader>
@@ -33,7 +33,7 @@ const GameHistoryPage: NextPage = async () => {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{gameHistory.map((history) => (
+						{gameHistory?.map((history) => (
 							<TableRow key={history.id}>
 								<TableCell>
 									<Link

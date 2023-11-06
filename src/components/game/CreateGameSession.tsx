@@ -34,11 +34,11 @@ const CreateGameSession: FC = () => {
 	};
 
 	return (
-		<div className="h-[600px] w-full border border-divider rounded-md flex items-center justify-center bg-secondary-extralight dark:bg-secondary-extradark">
+		<div className="h-56 w-full border border-divider rounded-md flex items-center justify-center bg-secondary-extralight dark:bg-secondary-extradark">
 			{sessionUrl ? (
 				<div className="flex flex-col gap-5 text-center">
 					<h4 className="h4">Share this link to start the game</h4>
-					<Link className="text-gray" href={sessionUrl}>
+					<Link className="text-gray sm:small" href={sessionUrl}>
 						{siteUrl + sessionUrl}
 					</Link>
 					<Button size="lg" asChild variant="outline">

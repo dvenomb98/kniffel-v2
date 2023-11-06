@@ -1,8 +1,8 @@
 import AccountPageLayout from "@/components/account/AccountPageLayout";
-import { getUserData} from "@/lib/server-utils";
 import { NextPage } from "next";
 import React from "react";
 import PersonalSettings from "@/components/account/PersonalSettings";
+import { getUserData } from "@/lib/server-utils/userUtils";
 
 const PersonalSettingsPage: NextPage = async () => {
 	const { userData } = await getUserData();

@@ -2,7 +2,7 @@
 import React, { FC } from "react";
 import { Button } from "../ui/Button";
 import Link from "next/link";
-import { AUTH_URLS, URLS } from "@/lib/urls";
+import { URLS } from "@/lib/urls";
 import { LogOutIcon, User2Icon } from "lucide-react";
 import {
 	DropdownMenu,
@@ -39,7 +39,7 @@ const AccountNav: FC = () => {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="">
 				<DropdownMenuItem className="py-3" asChild role="link">
-					<Link href={URLS.ACCOUNT + "/personal-settings"} className="flex gap-3 items-center">
+					<Link href={URLS.ACCOUNT} className="flex gap-3 items-center">
 						<User2Icon className="w-4 h-4" />
 						<span>Account</span>
 					</Link>

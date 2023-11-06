@@ -19,7 +19,7 @@ export interface UserMetaData {
       wins: number
       losts: number
     }
-    gameHistory: GameHistory[]
+    gameHistory?: GameHistory[]
     avatarUrl: string | null
   }
 

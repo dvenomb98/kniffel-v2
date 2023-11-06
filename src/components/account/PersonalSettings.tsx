@@ -7,6 +7,10 @@ import { Button } from "../ui/Button";
 import { useToast } from "@/hooks/useToast";
 import { API_URLS } from "@/lib/urls";
 import { baseUrl } from "@/lib/config";
+import Avatar from "../ui/Avatar";
+import useFieldValidation from "@/hooks/useValidation";
+import * as yup from "yup";
+import AvatarInput from "../ui/form/FileInput";
 
 interface PersonalSettingsProps {
 	userData: UserData;
@@ -14,10 +18,16 @@ interface PersonalSettingsProps {
 
 const PersonalSettings: FC<PersonalSettingsProps> = ({ userData }) => {
 	const { toast } = useToast();
+	const yupField = useFieldValidation();
 
-	const { playerName, email } = userData;
+	const schema = yup.object({
+		playerName: yupField.string.required,
+		avatar: yupField.file.optional,
+	});
 
-	const handleSubmit = async (playerName: string, avatar: string) => {
+	const { playerName, email, avatarUrl } = userData;
+
+	const handleSubmit = async (playerName: string, avatar: string | null) => {
 		const formData = new FormData();
 
 		formData.append("playerName", playerName);
@@ -47,20 +57,14 @@ const PersonalSettings: FC<PersonalSettingsProps> = ({ userData }) => {
 	return (
 		<Formik
 			initialValues={{ playerName, email, avatar: null }}
-			onSubmit={async (values) => await handleSubmit(values.playerName, values.avatar!)}
+			onSubmit={async (values) => await handleSubmit(values.playerName, values.avatar)}
+			validationSchema={schema}
 		>
-			{({ isSubmitting, setFieldValue, values }) => (
+			{({ isSubmitting}) => (
 				<Form className="flex flex-col gap-5">
 					<Input name="email" label="Email" disabled />
 					<Input name="playerName" label="Player name" />
-					<Input
-						onChange={(e) => setFieldValue("avatar", e.target.files?.[0])}
-						name="avatar"
-						type="file"
-						value={undefined}
-						label="Upload avatar"
-						accept="image/png, image/jpeg, image/webp, image/jpg"
-					/>
+					<AvatarInput name="avatar" alt={playerName} avatarUrl={avatarUrl} description="It can take up to one hour for avatar changes to reappear" />
 					<Button className="w-[200px]" loading={isSubmitting} type="submit">
 						Submit
 					</Button>

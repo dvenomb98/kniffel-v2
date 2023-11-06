@@ -1,7 +1,8 @@
-import { getLeaderBoardData } from "@/lib/server-utils";
+
 import React, { FC } from "react";
 import { RocketIcon } from "lucide-react";
 import LeadboardCard from "./LeadboardCard";
+import { getLeaderBoardData } from "@/lib/server-utils/leaderboardUtils";
 
 const LeaderboardLayout: FC = async () => {
 	const dataLeaderboards = await getLeaderBoardData();

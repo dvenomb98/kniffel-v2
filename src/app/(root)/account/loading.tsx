@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 const Loading: FC = () => {
   return (
-    <Skeleton className='w-full col-span-5 h-96 sm:h-72' />
+    <Skeleton className='w-full col-span-5 h-[500px] sm:h-96' />
   )
 }
 

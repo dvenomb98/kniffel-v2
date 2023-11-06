@@ -1,5 +1,6 @@
 import Game from "@/components/game/Game";
-import { getGameData, getUserData } from "@/lib/server-utils";
+import { getGameData } from "@/lib/game/server-utils/utils";
+import { getUserData } from "@/lib/server-utils/userUtils";
 import { NextPage } from "next";
 import React from "react";
 

@@ -1,19 +1,24 @@
 import React, { FC, Suspense } from "react";
-import CreateGameSession from "../game/CreateGameSession";
 import Tabs from "../ui/Tabs";
 import LeaderboardLayout from "./LeadboardLayout";
 import LeaderboardSkeletons from "../skeletons/LeaderboardSkeletons";
+import UnfinishedGames from "../game/UnfinishedGames";
+import CurrentGamesSkeletons from "../skeletons/CurrentGamesSkeletons";
 
 enum Values {
-	CREATE_GAME = "create_game",
+	YOUR_GAMES = "your-games",
 	LEADERBOARDS = "leaderboards",
 }
 
 const tabs = [
 	{
-		value: Values.CREATE_GAME,
-		label: "Create a new game",
-		children: <CreateGameSession />,
+		value: Values.YOUR_GAMES,
+		label: "Your current games",
+		children: (
+			<Suspense fallback={<CurrentGamesSkeletons />}>
+				<UnfinishedGames />
+			</Suspense>
+		),
 	},
 	{
 		value: Values.LEADERBOARDS,

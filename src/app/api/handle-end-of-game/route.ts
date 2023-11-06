@@ -1,4 +1,4 @@
-import { getUserData } from "@/lib/server-utils";
+import { getUserData } from "@/lib/server-utils/userUtils";
 import { createClient } from "@/lib/supabase/server";
 import { GameType } from "@/types/gameTypes";
 import { cookies } from "next/headers";
@@ -6,14 +6,14 @@ import { cookies } from "next/headers";
 export async function POST(request: Request) {
 	try {
 		const cookieStore = cookies();
-		const { userData } = await getUserData();
+		const { userData } = await getUserData(true);
 
 		const body = await request.json();
 		const gameValues = { ...body } as GameType;
 		const client = createClient(cookieStore);
 
 		// Check if the update has already been done to prevent duplicate updates.
-		const alreadyUpdated = userData.gameHistory.some((history) => history.id === gameValues.id);
+		const alreadyUpdated = userData.gameHistory?.some((history) => history.id === gameValues.id);
 		if (alreadyUpdated) {
 			return new Response(JSON.stringify({ message: "User already updated!" }), { status: 409 });
 		}
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 		};
 
 		const historyUpdate = [
-			...userData.gameHistory,
+			...userData.gameHistory?.length ? userData.gameHistory : [],
 			{
 				id: gameValues.id,
 				won: userData.userId === gameValues.winner,
