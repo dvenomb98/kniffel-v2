@@ -5,10 +5,13 @@ import { ChevronsDown, ChevronsUp } from "lucide-react";
 
 import { FC } from "react";
 
+export const dynamic = "force-dynamic"
+
 const AccountPage: FC = async () => {
 
 	const { userData } = await getUserData(true);
 	const scores = await getScore(userData.gameHistory || []);
+
 
 	return (
 		<AccountPageLayout header="Overview">
