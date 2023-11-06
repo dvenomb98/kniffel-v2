@@ -23,7 +23,7 @@ export const getUnfinishedGames = unstable_cache(
 
 		if (dataError) return null;
 
-		if (!data.length) return null;
+		if (!data?.length) return null;
 
 		return data
 	},

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
+import client from "@/lib/supabase/client";
 import { AlertTriangle } from "lucide-react";
 import { useEffect } from "react";
 
@@ -12,9 +13,13 @@ export default function Error({
 	reset: () => void;
 }) {
 	useEffect(() => {
-		// const reportEror = async (error: Error) => {
-		// }
-		// Log the error to an error reporting service
+		const reportError = async () => {
+			await client
+				.from("errors")
+				.insert({ name: error.name, cause: error?.cause || "", fullError: error });
+		};
+
+		reportError()
 	}, [error]);
 
 	return (
