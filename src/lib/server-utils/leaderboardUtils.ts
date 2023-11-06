@@ -1,10 +1,9 @@
 import { cookies } from "next/headers";
-import { unstable_cache } from "next/cache";
 import { UserData } from "@/types/userTypes";
 import { createClient } from "../supabase/server";
 import { getErrorMessage } from "../utils";
 
-export const getLeaderBoardData = unstable_cache(
+export const getLeaderBoardData = 
 	async () => {
 		const cookiesStore = cookies();
 		const client = createClient(cookiesStore);
@@ -28,7 +27,5 @@ export const getLeaderBoardData = unstable_cache(
 		const sortedData = publicInfo.sort((a, b) => b.statistics.wins - a.statistics.wins);
 
 		return sortedData.slice(0, 10);
-	},
-	["leaderboard-data"],
-	{ revalidate: 120 }
-);
+	}
+

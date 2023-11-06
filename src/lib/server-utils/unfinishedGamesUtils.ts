@@ -1,12 +1,10 @@
 import { cookies } from "next/headers";
-import { unstable_cache } from "next/cache";
-
 import { createClient } from "../supabase/server";
 import { GameType } from "@/types/gameTypes";
 
 export type UnfinishedGame = Pick<GameType, "id" | "gameState">
 
-export const getUnfinishedGames = unstable_cache(
+export const getUnfinishedGames = 
 	async () => {
 		const cookiesStore = cookies();
 		const client = createClient(cookiesStore);
@@ -26,7 +24,5 @@ export const getUnfinishedGames = unstable_cache(
 		if (!data?.length) return null;
 
 		return data
-	},
-	["unfinished-games-data"],
-	{ revalidate: 60 }
-)
+	}
+

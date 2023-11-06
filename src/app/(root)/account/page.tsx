@@ -2,10 +2,7 @@ import AccountPageLayout from "@/components/account/AccountPageLayout";
 import Avatar from "@/components/ui/Avatar";
 import { getScore, getUserData } from "@/lib/server-utils/userUtils";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
-
 import { FC } from "react";
-
-export const dynamic = "force-dynamic"
 
 const AccountPage: FC = async () => {
 
