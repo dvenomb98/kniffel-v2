@@ -30,5 +30,5 @@ export const getLeaderBoardData = unstable_cache(
 		return sortedData.slice(0, 10);
 	},
 	["leaderboard-data"],
-	{ revalidate: 30 }
+	{ revalidate: 120 }
 );
