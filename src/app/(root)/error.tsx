@@ -13,11 +13,15 @@ export default function Error({
 	reset: () => void;
 }) {
 	useEffect(() => {
+
+
 		const reportError = async () => {
 			await client
 				.from("errors")
 				.insert({ name: error.name, cause: error?.cause || "", fullError: error });
 		};
+
+		if(process.env.NODE_ENV !== "production") return
 
 		reportError()
 	}, [error]);
