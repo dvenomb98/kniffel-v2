@@ -61,6 +61,7 @@ export const GameProvider = ({
 					...parentGameValues.playerOne,
 					name: userData?.playerName!,
 					id: userData?.userId!,
+					avatarUrl: userData?.avatarUrl || null
 				},
 			};
 			dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload });
@@ -74,6 +75,7 @@ export const GameProvider = ({
 					...parentGameValues.playerTwo,
 					name: userData?.playerName!,
 					id: userData?.userId!,
+					avatarUrl: userData?.avatarUrl || null
 				},
 			};
 			dispatch({ type: ActionTypes.UPDATE_SESSION_VALUES, payload });

@@ -20,7 +20,6 @@ const AccountPage: FC = async () => {
 					alt={userData.playerName}
 					src={userData.avatarUrl}
 				/>
-
 				<div>
 					<p className="h4 font-medium">{userData.playerName}</p>
 					<p className="text-gray">{userData.email}</p>

@@ -34,6 +34,7 @@ export const initialPlayerOneStats: Player = {
   final_score: 0,
   bonus_score: 0,
   id: null,
+  avatarUrl: null,
 };
 
 export const initialPlayerTwoStats: Player = {
@@ -43,6 +44,7 @@ export const initialPlayerTwoStats: Player = {
   final_score: 0,
   bonus_score: 0,
   id: null,
+  avatarUrl: null
 };
 
 export const initialGameValues: GameType = {

@@ -58,6 +58,7 @@ export interface Player {
 	final_score: number;
 	bonus_score: number;
 	id: string | null;
+	avatarUrl: string | null
 }
 
 export interface Die {
